@@ -9,15 +9,13 @@ const client = new Twitter({
 const stream = client.stream('statuses/filter', {track: '#bitcoin, #litecoin, #ethereum'})
 
 stream.on('data', (event) => {
-  // console.log(Object.keys(event))
-  // console.log(JSON.stringify(event))
   if (!event.retweeted_status || !event.retweeted_status.extended_tweet) return
   console.log(event.retweeted_status.extended_tweet.full_text)
   console.log('-----------------------------')
-  // client.post('favorites/create', {id:event.id_str}, (error, response) => {
-  //   if(error) throw error;
-  //   console.log('Tweet ID: '+response.id_str+' Liked! - "'+response.text+'"')
-  // });
+  client.post('favorites/create', {id: event.id_str}, (error, response) => {
+    if (error) return console.error(`failed to like: ${error.message}`)
+    console.log('Tweet ID: ' + response.id_str + ' Liked! - "' + response.text + '"')
+  })
 })
 
 stream.on('error', (error) => {
