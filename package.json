@@ -1,0 +1,24 @@
+{
+  "name": "twitter-listener",
+  "version": "1.0.0",
+  "description": "https://dev.to/notfakedev/twitter-bot-in-17-lines-of-code-100m?utm_source=digest_mailer&utm_medium=email&utm_campaign=digest_email",
+  "main": "index.js",
+  "dependencies": {
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node $npm_package_main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christian-fei/twitter-listener.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christian-fei/twitter-listener/issues"
+  },
+  "homepage": "https://github.com/christian-fei/twitter-listener#readme"
+}
