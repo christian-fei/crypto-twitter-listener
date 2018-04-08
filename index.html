@@ -48,8 +48,9 @@
 
     evtSource.onmessage = function (e) {
       const data = JSON.parse(e.data)
+      console.log('data', data)
       if (!data.retweeted_status || !data.retweeted_status.place || !data.retweeted_status.place.bounding_box || !data.retweeted_status.place.bounding_box.coordinates) {
-        console.log('skip tweet')
+        console.log('not coords')
         return
       }
 
