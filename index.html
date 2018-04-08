@@ -23,6 +23,7 @@
       height: 100%;
       background-image: url("world.svg");
       background-size: 100%;
+      background-size: auto;
       background-repeat: no-repeat;
       background-position: 50%;
       overflow: hidden;
@@ -55,8 +56,15 @@
       const t = document.createElement("div")
       t.classList.add("geo-tweet")
 
-      const latPercent = (50 + 90/lat) + "%";
-      const lonPercent = (50 + 180/lon) + "%";
+      let latPercent, lonPercent
+
+      console.log('lat', lat)
+      console.log('lon', lon)
+
+      // latPercent = (50 + 90/lat) + "%";
+      // lonPercent = (50 + 180/lon) + "%";
+      latPercent = ((lat + 90) / 180) * 100 + "%"
+      lonPercent = ((lon + 180) / 360) * 100 + "%"
 
       t.style.top = latPercent;
       t.style.left = lonPercent;
