@@ -63,8 +63,11 @@ stream.on('data', async (data) => {
     if (data.retweeted_status.user.location) {
       const location = data.retweeted_status.user.location
       console.log('has location', location)
-      let coordinates = await r2(`https://geocode.xyz/${location}?geoit=csv`).text
+      const url = `https://geocode.xyz/${location}?geoit=csv`
+      console.log('url', url)
+      let coordinates = await r2(url).text
       coordinates = coordinates.split(',').map(parseFloat)
+      console.log('coordinates', coordinates)
       if (coordinates.find(x => Number.isNaN(x))) { return console.log('failed to get coordinates') }
       const lat = avgGeoCoordinatesLat(coordinates)
       const lon = avgGeoCoordinatesLon(coordinates)
@@ -101,8 +104,10 @@ function avgTwitterCoordinatesLon (coordinates) {
 }
 
 function avgGeoCoordinatesLat (coordinates) {
+  return coordinates[2]
   return coordinates.reduce((sum, curr, i) => sum + (i % 2 === 0 ? curr : 0), 0) / coordinates.length / 2
 }
 function avgGeoCoordinatesLon (coordinates) {
+  return coordinates[3]
   return coordinates.reduce((sum, curr, i) => sum + (i % 2 === 1 ? curr : 0), 0) / coordinates.length / 2
 }

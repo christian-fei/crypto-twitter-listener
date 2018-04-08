@@ -4,6 +4,7 @@
   "description": "https://dev.to/notfakedev/twitter-bot-in-17-lines-of-code-100m?utm_source=digest_mailer&utm_medium=email&utm_campaign=digest_email",
   "main": "index.js",
   "dependencies": {
+    "@google/maps": "^0.4.6",
     "finalhandler": "^1.1.1",
     "r2": "^2.0.1",
     "serve-static": "^1.13.2",

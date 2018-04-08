@@ -47,51 +47,22 @@
     var evtSource = new EventSource('/')
 
     evtSource.onmessage = function (e) {
-      const data = JSON.parse(e.data)
-      console.log('data', data)
-      if (!data.retweeted_status || !data.retweeted_status.place || !data.retweeted_status.place.bounding_box || !data.retweeted_status.place.bounding_box.coordinates) {
-        console.log('not coords')
-        return
-      }
+      const {lat, lon} = JSON.parse(e.data)
+      console.log('lat, lon', lat, lon)
 
-      const latCoordinate = avgLat(data.retweeted_status.place.bounding_box.coordinates[0])
-      const lonCoordinate = avgLon(data.retweeted_status.place.bounding_box.coordinates[0])
-      var t = document.createElement("div")
+      if (!lat || !lon) return console.log('wrong', lat, lon)
+
+      const t = document.createElement("div")
       t.classList.add("geo-tweet")
-      const lon = (50 + 180/lonCoordinate) + "%";
-      const lat = (50 + 90/latCoordinate) + "%";
-      t.style.top = lat;
-      t.style.left = lon;
+
+      const latPercent = (50 + 90/lat) + "%";
+      const lonPercent = (50 + 180/lon) + "%";
+
+      t.style.top = latPercent;
+      t.style.left = lonPercent;
+
       world.appendChild( t );
     }
-
-    function avgLat (coordinates) {
-      return coordinates.reduce((sum, [curr]) => sum + curr, 0) / coordinates.length
-    }
-    function avgLon (coordinates) {
-      return coordinates.reduce((sum, [_, curr]) => sum + curr, 0) / coordinates.length
-    }
-      // socket.on('tweet', function (data) {
-      //   try {
-      //     data = JSON.parse(data);
-      //     if (data.geo) {
-      //       var lat = parseFloat(data.geo.coordinates[0]),
-      //         lon = parseFloat(data.geo.coordinates[1]);
-
-      //       console.log(lat, lon);
-
-      //       var t = document.createElement("div");
-      //       t.classList.add("geo-tweet");
-
-      //       lon = (50 + 180 / lon) + "%";
-      //       lat = (50 + 90 / lat) + "%";
-      //       t.style.top = lat;
-      //       t.style.left = lon;
-      //       world.appendChild(t);
-      //     }
-      //   } catch (e) {
-      //   }
-      // });
   </script>
 </body>
 
