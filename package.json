@@ -7,6 +7,7 @@
     "@google/maps": "^0.4.6",
     "finalhandler": "^1.1.1",
     "r2": "^2.0.1",
+    "sentiment": "^4.2.0",
     "serve-static": "^1.13.2",
     "twitter": "^1.7.1"
   },

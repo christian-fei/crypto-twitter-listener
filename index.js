@@ -6,6 +6,8 @@ const client = new Twitter({
   access_token_secret: process.env.npm_config_twitter_access_token_secret
 })
 
+const sentiment = require('sentiment')
+
 const http = require('http')
 const serveStatic = require('serve-static')
 const serve = serveStatic('.', {'index': ['index.html']})
@@ -56,6 +58,11 @@ const stream = client.stream('statuses/filter', {track: '#bitcoin, #litecoin, #e
 
 stream.on('data', async (data) => {
   if (!data.retweeted_status || !data.retweeted_status.extended_tweet) return
+  const text = data.retweeted_status.extended_tweet.full_text
+  const {positive} = sentiment(text)
+  console.log(text)
+  console.log('result', positive)
+  console.log('---------------------------')
 })
 
 stream.on('error', (error) => {
