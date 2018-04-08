@@ -14,62 +14,17 @@
     html,
     body {
       min-height: 100%;
-      height: 100%;
-    }
-
-    #world {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background-image: url("world.svg");
-      background-size: 100%;
-      background-size: auto;
-      background-repeat: no-repeat;
-      background-position: 50%;
-      overflow: hidden;
-    }
-
-    .geo-tweet {
-      position: absolute;
-      width: 1em;
-      height: 1em;
-      border-radius: 50%;
-      background-color: red;
-      border: 2px solid white;
     }
   </style>
 </head>
 
 <body>
-  <div id="world"></div>
-
   <script>
-    var world = document.getElementById("world");
     var evtSource = new EventSource('/')
 
     evtSource.onmessage = function (e) {
-      const {lat, lon} = JSON.parse(e.data)
-      console.log('lat, lon', lat, lon)
-
-      if (!lat || !lon) return console.log('wrong', lat, lon)
-
-      const t = document.createElement("div")
-      t.classList.add("geo-tweet")
-
-      let latPercent, lonPercent
-
-      console.log('lat', lat)
-      console.log('lon', lon)
-
-      // latPercent = (50 + 90/lat) + "%";
-      // lonPercent = (50 + 180/lon) + "%";
-      latPercent = ((lat + 90) / 180) * 100 + "%"
-      lonPercent = ((lon + 180) / 360) * 100 + "%"
-
-      t.style.top = latPercent;
-      t.style.left = lonPercent;
-
-      world.appendChild( t );
+      const data = JSON.parse(e.data)
+      console.log('data', data)
     }
   </script>
 </body>

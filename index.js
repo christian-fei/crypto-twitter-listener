@@ -6,10 +6,6 @@ const client = new Twitter({
   access_token_secret: process.env.npm_config_twitter_access_token_secret
 })
 
-const googleMapsClient = require('@google/maps').createClient({
-  key: process.env.npm_config_google_api_key,
-  Promise
-})
 const http = require('http')
 const serveStatic = require('serve-static')
 const serve = serveStatic('.', {'index': ['index.html']})
@@ -60,39 +56,8 @@ const stream = client.stream('statuses/filter', {track: '#bitcoin, #litecoin, #e
 
 stream.on('data', async (data) => {
   if (!data.retweeted_status || !data.retweeted_status.extended_tweet) return
-
-  if (!data.retweeted_status || !data.retweeted_status.place || !data.retweeted_status.place.bounding_box || !data.retweeted_status.place.bounding_box.coordinates) {
-    console.log('no coordinates')
-    if (data.retweeted_status.user.location) {
-      const location = data.retweeted_status.user.location
-      console.log('has location', location)
-      const response = await googleMapsClient.geocode({address: location}).asPromise().catch((err) => console.error(err))
-      if (!response) return console.log('no response')
-      if (!response.json) return console.log('no response.json')
-      if (!response.json.results) return console.log('no json.results')
-      if (!response.json.results[0]) return console.log('no json.results[0]')
-
-      const {lat, lng: lon} = response.json.results[0].geometry.location
-      console.log('{lat, lon}', JSON.stringify({lat, lon}, null, 2))
-
-      writeSSE(JSON.stringify({lat, lon}))
-    }
-  } else {
-    console.log('has coordinates')
-    const lat = avgTwitterCoordinatesLat(data.retweeted_status.place.bounding_box.coordinates[0])
-    const lon = avgTwitterCoordinatesLon(data.retweeted_status.place.bounding_box.coordinates[0])
-    console.log('twitter: lat, lon', lat, lon)
-    writeSSE(JSON.stringify({lat, lon}))
-  }
 })
 
 stream.on('error', (error) => {
   throw error
 })
-
-function avgTwitterCoordinatesLat (coordinates) {
-  return coordinates.reduce((sum, [curr]) => sum + curr, 0) / coordinates.length
-}
-function avgTwitterCoordinatesLon (coordinates) {
-  return coordinates.reduce((sum, [_, curr]) => sum + curr, 0) / coordinates.length
-}
