@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      height: 100%;
+    }
+
+    #world {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-image: url("world.svg");
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: 50%;
+      overflow: hidden;
+    }
+
+    .geo-tweet {
+      position: absolute;
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      background-color: red;
+      border: 2px solid white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="world"></div>
+
+  <script>
+    var world = document.getElementById("world");
+    var evtSource = new EventSource('/')
+
+    evtSource.onmessage = function (e) {
+      const data = JSON.parse(e.data)
+      if (!data.retweeted_status || !data.retweeted_status.place || !data.retweeted_status.place.bounding_box || !data.retweeted_status.place.bounding_box.coordinates) {
+        console.log('skip tweet')
+        return
+      }
+
+      const latCoordinate = avgLat(data.retweeted_status.place.bounding_box.coordinates[0])
+      const lonCoordinate = avgLon(data.retweeted_status.place.bounding_box.coordinates[0])
+      var t = document.createElement("div")
+      t.classList.add("geo-tweet")
+      const lon = (50 + 180/lonCoordinate) + "%";
+      const lat = (50 + 90/latCoordinate) + "%";
+      t.style.top = lat;
+      t.style.left = lon;
+      world.appendChild( t );
+    }
+
+    function avgLat (coordinates) {
+      return coordinates.reduce((sum, [curr]) => sum + curr, 0) / coordinates.length
+    }
+    function avgLon (coordinates) {
+      return coordinates.reduce((sum, [_, curr]) => sum + curr, 0) / coordinates.length
+    }
+      // socket.on('tweet', function (data) {
+      //   try {
+      //     data = JSON.parse(data);
+      //     if (data.geo) {
+      //       var lat = parseFloat(data.geo.coordinates[0]),
+      //         lon = parseFloat(data.geo.coordinates[1]);
+
+      //       console.log(lat, lon);
+
+      //       var t = document.createElement("div");
+      //       t.classList.add("geo-tweet");
+
+      //       lon = (50 + 180 / lon) + "%";
+      //       lat = (50 + 90 / lat) + "%";
+      //       t.style.top = lat;
+      //       t.style.left = lon;
+      //       world.appendChild(t);
+      //     }
+      //   } catch (e) {
+      //   }
+      // });
+  </script>
+</body>
+
+</html>
