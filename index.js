@@ -63,6 +63,7 @@ stream.on('data', async (data) => {
   console.log(text)
   console.log('result', positive)
   console.log('---------------------------')
+  writeSSE(JSON.stringify(data))
 })
 
 stream.on('error', (error) => {
